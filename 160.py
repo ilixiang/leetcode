@@ -8,33 +8,26 @@ class ListNode:
 def getInsersectionNode(headA, headB):
     nodeA = headA
     nodeB = headB
-    while nodeA != None and nodeB != None:
-        if nodeA == nodeB:
-            return nodeA
-        nodeA = nodeA.next
-        nodeB = nodeB.next
 
-    longListHead = None
-    shortListHead = None
+    countA = 0
+    countB = 0
+    while nodeA != None:
+        nodeA = nodeA.next
+        countA = countA + 1
+    while nodeB != None:
+        nodeB = nodeB.next
+        countB = countB + 1
+
     longListNode = None
     shortListNode = None
-    if nodeA is None:
-        longListHead = headB
-        longListNode = nodeB
-        shortListHead = headA
-        shortListNode = nodeA
+    if countA > countB:
+        longListNode, shortListNode = headA, headB
     else:
-        longListHead = headB
-        longListNode = nodeB
-        shortListHead = headA
-        shortListNode = nodeA
+        longListNode, shortListNode = headB, headA
 
-    shortListNode = shortListHead
-    while longListNode != None:
-        shortListNode = shortListNode.next
+    for i in range(0, abs(countA - countB)):
         longListNode = longListNode.next
 
-    longListNode = longListHead
     while longListNode != shortListNode:
         longListNode = longListNode.next
         shortListNode = shortListNode.next
