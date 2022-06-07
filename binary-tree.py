@@ -48,3 +48,34 @@ def postOrder(root):
     while len(stack2) != 0:
         node = stack2.pop()
         # process node
+
+def isCompleteBinaryTree(root):
+    if root == None:
+        return True
+    queue = [root]
+    onlyLeaf = False
+    while len(queue) != 0:
+        node = queue.pop(0)
+        if node.left == None and node.right != None:
+            return False
+        if onlyLeaf and (node.left != None or node.right != None):
+            return False
+        if node.left == None or node.right == None:
+            onlyLeaf = True
+
+        if node.left != None:
+            queue.append(node.left)
+        if node.right != None:
+            queue.append(node.right)
+    return True
+
+def isBalancedBinaryTree(root):
+    if root is None:
+        return (True, 0)
+    left = root.left
+    right = root.left
+    
+    isLeftBalanced, leftHeight = isBalancedTree(left)
+    isRightBalanced, rightHeight = isBalancedTree(right)
+
+    return isLeftBalanced and isRightBalanced and abs(leftHeight - rightHeight) <= 1
