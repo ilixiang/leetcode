@@ -11,31 +11,27 @@ def reverseKGroup(head, k):
     additionHead = ListNode(0, head)
     startPrevious = additionHead
     start = head
-    end = startPrevious
-    endNext = end.next
     
-    while True:
-        step = 0
-        while step < k and endNext != None:
-            end = end.next
-            endNext = end.next
-            step = step + 1
-        if step < k:
-            return additionHead.next
-
-        while start.next != endNext:
+    while start != None:
+        step = 1
+        while step < k and start.next != None:
             tmp = start.next
             start.next = start.next.next
             tmp.next = startPrevious.next
             startPrevious.next = tmp
+            step = step + 1
+
+        if step < k:
+            start = startPrevious.next
+            while start.next != None:
+                tmp = start.next
+                start.next = start.next.next
+                tmp.next = startPrevious.next
+                startPrevious.next = tmp
+                step = step + 1
+            return additionHead.next
 
         startPrevious = start
         start = startPrevious.next
-        end = startPrevious
-        endNext = end.next
+    return additionHead.next
 
-
-h = reverseKGroup(ListNode(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5))))), 2)
-while h != None:
-    print(h.val)
-    h = h.next
