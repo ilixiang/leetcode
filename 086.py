@@ -14,15 +14,22 @@ def partition(head, x):
     right = rightPrevious.next 
     while right != None:
         if right.val < x:
-            rightPrevious.next = right.next
-            right.next = left.next
-            left.next = right
-            left = left.next
-        rightPrevious = rightPrevious.next
-        right = rightPrevious.next if None != rightPrevious else None
+            if right != left.next:
+                rightPrevious.next = right.next
+                right.next = left.next
+                left.next = right
+                left = left.next
+                right = rightPrevious.next
+            else:
+                left = left.next
+                rightPrevious = rightPrevious.next
+                right = rightPrevious.next
+        else:
+            rightPrevious = rightPrevious.next
+            right = rightPrevious.next
     return additionHead.next
     
-head = ListNode(1, ListNode(4, ListNode(3, ListNode(2, ListNode(5, ListNode(2))))))
+head = ListNode(1, ListNode(4, ListNode(3, ListNode(0, ListNode(2, ListNode(5, ListNode(2)))))))
 head = partition(head, 3)
 while head != None:
     print(head.val)
