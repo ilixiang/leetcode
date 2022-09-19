@@ -1,26 +1,28 @@
 #!/usr/bin/python3
 
-class TreeNode:
-    def __init__(self, val = 0, left = None, right = None):
-        self.val = val
-        self.left = left
-        self.right = right 
+def isInterleave(s1, s2, s3):
+    if len(s1) + len(s2) != len(s3):
+        return False
+    dp = [None] * (len(s1) + 1)
+    for i in range(0, len(s1) + 1):
+        dp[i] = [None] * (len(s2) + 1)
+    return isInterleaveDp(s1, 0, s2, 0, s3, 0, dp)
 
-def isValidBST(root):
-    return isValidBSTRecursive(root, None, None)
+def isInterleaveDp(s1, i1, s2, i2, s3, i3, dp):
+    if dp[i1][i2] != None:
+        return dp[i1][i2]
 
-def isValidBSTRecursive(root, lower, upper):
-    if root == None:
-        return True
+    if i1 == len(s1):
+        dp[i1][i2] = s2[i2:] == s3[i3:]
+        return dp[i1][i2]
 
-    val = root.val
-    return (lower == None or (lower != None and lower < val)) \
-        and (upper == None or (upper != None and val < upper)) \
-        and isValidBSTRecursive(root.left, lower, val) \
-        and isValidBSTRecursive(root.right, val, upper)
+    if i2 == len(s2):
+        dp[i1][i2] = s1[i1:] == s3[i3:]
+        return dp[i1][i2]
 
-root = TreeNode(2, TreeNode(1), TreeNode(3))
-print(isValidBST(root))
-root = TreeNode(5, TreeNode(1), TreeNode(4, TreeNode(3), TreeNode(6)))
-print(isValidBST(root))
+    dp[i1][i2] = (s1[i1] == s3[i3] and isInterleaveDp(s1, i1 + 1, s2, i2, s3, i3 + 1, dp)) or (s2[i2] == s3[i3] and isInterleaveDp(s1, i1, s2, i2 + 1, s3, i3 + 1, dp))
+    return dp[i1][i2]
+
+print(isInterleave('aabcc', 'dbbca', 'aadbbbaccc'))
+print(isInterleave('aabcc', 'dbbca', 'aadbbcbcac'))
 
