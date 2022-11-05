@@ -1,26 +1,27 @@
 #!/usr/bin/python3
 
 def isInterleave(s1, s2, s3):
-    dp = {}
-    return isInterleaveDp(s3, s1, s2, 0, 0, 0, dp, 'a', 'b') or isInterleave(s3, s2, s1, 0, 0, 0, dp, 'b', 'a')
+    if len(s1) + len(s2) != len(s3):
+        return False
+    dp = [None] * (len(s1) + 1)
+    for i in range(0, len(dp)):
+        dp[i] = [None] * (len(s2) + 1)
+    return isInterleaveDp(s1, s2, s3, 0, 0, dp)
 
-def isInterleaveDp(target, cur, next, tIndex, cIndex, nIndex, dp, cPrefix, nPrefix):
-    if tIndex == len(target):
-        return True
+def isInterleaveDp(s1, s2, s, i1, i2, dp):
+    if dp[i1][i2] != None:
+        return dp[i1][i2]
+
+    rev = False
+    if i1 == len(s1):
+        rev = s[i1 + i2:] == s2[i2:]
+    elif i2 == len(s2):
+        rev = s[i1 + i2:] == s1[i1:]
+    else:
+        rev = i1 < len(s1) and s1[i1] == s[i1 + i2] and isInterleaveDp(s1, s2, s, i1 + 1, i2, dp)
+        if not rev:
+            rev = i2 < len(s2) and s2[i2] == s[i1 + i2] and isInterleaveDp(s1, s2, s, i1, i2 + 1, dp)
     
-    key = '%s%ds%d'%(cPrefix, cIndex, tIndex)
-    if key in dp:
-        return dp[key]
-
-    rev = False
-    while cIndex < len(cur) and tIndex < len(target) and cur[cIndex] == target[tIndex]:
-        if isInterleaveDp(target, next, cur, tIndex + 1, nIndex, cIndex + 1, dp, nPrefix, cPrefix):
-            rev = True
-            break
-        cIndex += 1
-        tIndex += 1
-    if cIndex == len(cur):
-        rev = True
-    rev = False
-    dp[key] = rev
+    dp[i1][i2] = rev
     return rev
+
