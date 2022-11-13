@@ -2,15 +2,13 @@
 
 def singleNumber(nums):
     rev = 0
-    negative = 0
-    for i in range(0, 32):
+    for i in range(0, 31):
         tmp = 0
         for num in nums:
-            if num < 0:
-                negative += 1
-                num = -num
-            tmp += (num & (1 << i)) >> i
+            tmp += (num >> i) & 1
         rev |= (tmp % 3) << i
-    if negative % 3 != 0:
-        return -1 * rev
-    return rev
+    negative = 0
+    for num in nums:
+        if num < 0:
+            negative += 1
+    return rev if negative % 3 == 0 else (-1 * ((1 << 31) - rev))
