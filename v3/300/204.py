@@ -5,16 +5,14 @@ from math import sqrt
 def countPrime(n):
     if n < 2:
         return 0
-    
-    isPrimes = [True] * n
-    for i in range(2, int(sqrt(n)) + 1):
-        if not isPrimes[i]:
+
+    primes = [1] * n
+    primes[0] = 0
+    primes[1] = 0
+    for i in range(2, int(n ** 0.5) + 1):
+        if primes[i] != 1:
             continue
         for j in range(i * i, n, i):
-            isPrimes[j] = False
+            primes[j] = 0
     
-    rev = 0
-    for i in range(2, n):
-        if isPrimes[i]:
-            rev += 1
-    return rev
+    return sum(primes)
