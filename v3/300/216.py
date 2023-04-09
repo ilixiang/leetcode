@@ -2,6 +2,8 @@
 
 def conbinationSumDp(k, n):
     cache = {}
+    END_REV = [[]]
+    EMPTY_REV = []
 
     def dp(start, pos, target):
         cachedRev = cache.get((start, pos, target), None)
@@ -9,9 +11,9 @@ def conbinationSumDp(k, n):
             return cachedRev
         
         if target == 0 and pos == k:
-            return [[]]
+            return END_REV
         if pos >= k:
-            return []
+            return EMPTY_REV
 
         cachedRev = []
         for num in range(start, min(target + 1, 11 - k + pos)):
